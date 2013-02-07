@@ -373,3 +373,31 @@ describe('Model#isValid()', function(){
     assert(0 == user.errors.length);
   })
 })
+
+describe('Model#changed()', function () {
+  var User = model('user').attr('a')
+  it('should return an Object with all the changed attributes', function () {
+    var user = new User().set({a:1})
+    assert('a' in user.changed())
+    assert(Object.keys(user.changed()).length === 1)
+  })
+  it('should return false if nothing has changed', function () {
+    var user = new User
+    assert(user.changed() === false)
+  })
+})
+
+describe('Model#changed(attr)', function () {
+  var User = model('user')
+    .attr('a')
+    .attr('b')
+    .attr('c')
+  var user = new User().set({a:1,b:undefined})
+  it('should return true if the attr has changed', function () {
+    assert(user.changed('a') === true)
+    assert(user.changed('b') === true)
+  })
+  it('should return false if it hasn\'t', function () {
+    assert(user.changed('c') === false)
+  })
+})
