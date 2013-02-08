@@ -15,7 +15,11 @@
     "component/json": "*",
     "component/emitter": "*",
     "component/collection": "*",
-    "visionmedia/superagent": "*"
+    "visionmedia/superagent": "*",
+    "jkroso/set": "*",
+    "RedVentures/reduce": "*",
+    "aheckmann/sliced": "*",
+    "component/format-parser": "*"
   },
   "development": {
     "component/reactive": "*",
@@ -23,6 +27,7 @@
     "component/domify": "*"
   },
   "scripts": [
+    "lib/set.js",
     "lib/index.js",
     "lib/static.js",
     "lib/proto.js"
