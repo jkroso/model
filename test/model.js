@@ -1,7 +1,8 @@
 
 var model = require('model')
   , assert = require('component-assert')
-  , request = require('visionmedia-superagent/lib/client'); // TODO: fix builder
+  , request = require('visionmedia-superagent/lib/client') // TODO: fix builder
+  , Base = require('model/lib/static')
 
 var User = model('User')
   .attr('id', { type: 'number' })
@@ -443,5 +444,18 @@ describe('Model#<multi-attr>', function () {
       })
       user.addresses().del('a')
     })
+  })
+})
+
+describe('inheritance', function () {
+  it('should inherit all instance and class methods', function () {
+    var Dog = model('Dog', Pet)
+    assert(new Dog() instanceof Pet)
+    assert(Dog.all === Pet.all)
+  })
+
+  it('should inherit from Base by default', function () {
+    assert(new Pet() instanceof Base)
+    assert(Pet.all === Base.all)
   })
 })
