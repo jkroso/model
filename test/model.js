@@ -1,7 +1,8 @@
 
 var model = require('model')
   , assert = require('component-assert')
-  , request = require('visionmedia-superagent/lib/client'); // TODO: fix builder
+  , request = require('visionmedia-superagent/lib/client') // TODO: fix builder
+  , Base = require('model/lib/static')
 
 var User = model('User')
   .attr('id', { type: 'number' })
@@ -399,5 +400,62 @@ describe('Model#changed(attr)', function () {
   })
   it('should return false if it hasn\'t', function () {
     assert(user.changed('c') === false)
+  })
+})
+
+describe('Model#<multi-attr>', function () {
+  var User = model('user')
+    .attr('addresses', {cardinality:'many', type:'string'})
+
+  var user
+  beforeEach(function () {
+    user = new User({addresses: ['a','b']})
+  })
+  
+  it('should return the Set if no args are passed', function () {
+    assert(user.addresses()[0] === 'a')
+    assert(user.addresses()[1] === 'b')
+  })
+  
+  it('should replace the set if args are passed', function (done) {
+    user.on('change addresses', function (val, prev) {
+      assert(prev[0] === 'a')
+      assert(prev[1] === 'b')
+      assert(user.addresses()[0] === '12 west')
+      assert(user.addresses()[1] === '2 east')
+      done()
+    })
+    user.addresses(['12 west', '2 east'])
+  })
+
+  describe('Set', function () {
+    it('should trigger a change event when items are added', function (done) {
+      user.on('change addresses', function (val, prev) {
+        assert(user.addresses()[2] === '12 west')
+        done()
+      })
+      user.addresses().add('12 west')
+    })
+
+    it('should trigger a change event when items are removed', function (done) {
+      user.on('change addresses', function (val, prev) {
+        assert(user.addresses()[0] === 'b')
+        done()
+      })
+      user.addresses().del('a')
+    })
+  })
+})
+
+describe('inheritance', function () {
+  it('should inherit all instance and class methods', function () {
+    var Dog = model('Dog', Pet)
+    assert(new Dog() instanceof Pet)
+    assert(Dog.all === Pet.all)
+  })
+
+  it('should inherit from Base by default', function () {
+    assert(new Pet() instanceof Base)
+    assert(Pet.all === Base.all)
   })
 })
