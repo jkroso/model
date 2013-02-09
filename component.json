@@ -11,10 +11,7 @@
     "database"
   ],
   "dependencies": {
-    "component/each": "*",
-    "component/json": "*",
     "component/emitter": "*",
-    "component/collection": "*",
     "visionmedia/superagent": "*",
     "jkroso/set": "*",
     "RedVentures/reduce": "*",

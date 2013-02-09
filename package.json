@@ -1,7 +1,16 @@
 {
   "name": "model",
   "version": "0.0.0",
+  "main": "lib/index.js",
   "devDependencies": {
     "express": "3.0.0"
+  },
+  "dependencies": {
+    "emitter": "git://github.com/component/emitter",
+    "sliced": "0.0.5",
+    "set": "git://github.com/jkroso/set",
+    "reduce": "git://github.com/RedVentures/reduce",
+    "format-parser": "git://github.com/component/format-parser",
+    "superagent": "git://github.com/visionmedia/superagent"
   }
 }
