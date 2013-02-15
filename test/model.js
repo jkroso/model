@@ -1,8 +1,9 @@
 
-var model = require('model')
-  , assert = require('component-assert')
-  , request = require('visionmedia-superagent/lib/client') // TODO: fix builder
-  , Base = require('model/lib/static')
+var model = require('../lib')
+  , assert = require('chai').assert
+  , should = require('chai').should()
+  , request = require('superagent/lib/client')
+  , Base = require('../lib/static')
 
 var User = model('User')
   .attr('id', { type: 'number' })
@@ -39,24 +40,24 @@ describe('model(name)', function(){
 describe('new Model(object)', function(){
   it('should populate attrs', function(){
     var user = new User({ name: 'Tobi', age: 2 });
-    assert('Tobi' == user.name());
-    assert(2 == user.age());
+    assert('Tobi' == user.name);
+    assert(2 == user.age);
   })
 })
 
 describe('Model(object)', function(){
   it('should populate attrs', function(){
     var user = User({ name: 'Tobi', age: 2 });
-    assert('Tobi' == user.name());
-    assert(2 == user.age());
+    assert('Tobi' == user.name);
+    assert(2 == user.age);
   })
 })
 
 describe('Model#.<attr>(value)', function(){
   it('should set a value', function(){
     var user = new User;
-    assert(user == user.name('Tobi'));
-    assert('Tobi' == user.name());
+    user.name = 'Tobi';
+    assert('Tobi' == user.name);
   })
 
   it('should emit "change <attr>" events', function(done){
@@ -68,7 +69,7 @@ describe('Model#.<attr>(value)', function(){
       done();
     });
 
-    user.name('Luna');
+    user.name = 'Luna';
   })
 
   it('should emit "change" events', function(done){
@@ -81,7 +82,7 @@ describe('Model#.<attr>(value)', function(){
       done();
     });
 
-    user.name('Luna');
+    user.name = 'Luna'
   })
 })
 
@@ -101,8 +102,8 @@ describe('Model#set(attrs)', function(){
   it('should set several attrs', function(){
     var user = new User;
     user.set({ name: 'Tobi', age: 2 });
-    assert('Tobi' == user.name());
-    assert(2 == user.age());
+    assert('Tobi' == user.name);
+    assert(2 == user.age);
   })
 })
 
@@ -185,7 +186,7 @@ describe('Model#save(fn)', function(){
       it('should POST to /:model', function(done){
         var pet = new Pet({ name: 'Tobi', species: 'Ferret' });
         pet.save(function(){
-          assert(0 == pet.id());
+          assert(0 == pet.id);
           done();
         });
       })
@@ -232,7 +233,7 @@ describe('Model#save(fn)', function(){
           assert(1 == pet.errors.length);
           assert('name' == pet.errors[0].attr);
           assert('field required' == pet.errors[0].message);
-          assert(null == pet.id());
+          assert(null == pet.id);
           done();
         });
       })
@@ -244,13 +245,13 @@ describe('Model#save(fn)', function(){
       it('should PUT to /:model/:id', function(done){
         var pet = new Pet({ name: 'Tobi', species: 'Ferret' });
         pet.save(function(){
-          assert(0 == pet.id());
-          pet.name('Loki');
+          assert(0 == pet.id);
+          pet.name = 'Loki' 
           pet.save(function(){
-            assert(0 == pet.id());
+            assert(0 == pet.id);
             Pet.get(0, function(err, pet){
-              assert(0 == pet.id());
-              assert('Loki' == pet.name());
+              assert(0 == pet.id);
+              assert('Loki' == pet.name);
               done();
             });
           });
@@ -304,13 +305,13 @@ describe('Model#save(fn)', function(){
         var pet = new Pet({ name: 'Tobi' });
         pet.save(function(err){
           assert(!err);
-          pet.name(null);
+          pet.name = null
           pet.save(function(err){
             assert('validation failed' == err.message);
             assert(1 == pet.errors.length);
             assert('name' == pet.errors[0].attr);
             assert('field required' == pet.errors[0].message);
-            assert(0 == pet.id());
+            assert(0 == pet.id);
             done();
           });
         });
@@ -322,7 +323,7 @@ describe('Model#save(fn)', function(){
 describe('Model#url(path)', function(){
   it('should include .id', function(){
     var user = new User;
-    user.id(5);
+    user.id = 5
     assert('/user/5' == user.url());
     assert('/user/5/edit' == user.url('edit'));
   })
@@ -365,11 +366,11 @@ describe('Model#isValid()', function(){
     assert(false === user.isValid());
     assert(2 == user.errors.length);
 
-    user.name('Tobi');
+    user.name = 'Tobi' 
     assert(false === user.isValid());
     assert(1 == user.errors.length);
 
-    user.email('tobi@learnboost.com');
+    user.email = 'tobi@learnboost.com'
     assert(true === user.isValid());
     assert(0 == user.errors.length);
   })
@@ -413,36 +414,36 @@ describe('Model#<multi-attr>', function () {
   })
   
   it('should return the Set if no args are passed', function () {
-    assert(user.addresses()[0] === 'a')
-    assert(user.addresses()[1] === 'b')
+    assert(user.addresses[0] === 'a')
+    assert(user.addresses[1] === 'b')
   })
   
   it('should replace the set if args are passed', function (done) {
     user.on('change addresses', function (val, prev) {
       assert(prev[0] === 'a')
       assert(prev[1] === 'b')
-      assert(user.addresses()[0] === '12 west')
-      assert(user.addresses()[1] === '2 east')
+      assert(user.addresses[0] === '12 west')
+      assert(user.addresses[1] === '2 east')
       done()
     })
-    user.addresses(['12 west', '2 east'])
+    user.addresses = ['12 west', '2 east']
   })
 
   describe('Set', function () {
     it('should trigger a change event when items are added', function (done) {
       user.on('change addresses', function (val, prev) {
-        assert(user.addresses()[2] === '12 west')
+        assert(user.addresses[2] === '12 west')
         done()
       })
-      user.addresses().add('12 west')
+      user.addresses.add('12 west')
     })
 
     it('should trigger a change event when items are removed', function (done) {
       user.on('change addresses', function (val, prev) {
-        assert(user.addresses()[0] === 'b')
+        assert(user.addresses[0] === 'b')
         done()
       })
-      user.addresses().del('a')
+      user.addresses.del('a')
     })
   })
 })

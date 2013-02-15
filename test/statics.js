@@ -1,6 +1,7 @@
 
-var model = require('model')
-  , assert = require('component-assert');
+var model = require('../lib')
+  , assert = require('chai').assert
+  , should = require('chai').should()
 
 var User = model('User')
   .attr('id', { type: 'number' })

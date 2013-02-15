@@ -2,7 +2,7 @@
   <head>
     <title>Model tests</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="mocha.css" />
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
     <style>
       h1 {
         font-size: 14px;
@@ -11,13 +11,6 @@
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="../build/build.js"></script>
-    <script src="mocha.js"></script>
-    <script>mocha.setup('bdd')</script>
-    <script src="model.js"></script>
-    <script src="statics.js"></script>
-    <script>
-      mocha.run();
-    </script>
+    <script src="built.js"></script>
   </body>
 </html>
