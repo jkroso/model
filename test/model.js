@@ -84,6 +84,18 @@ describe('Model#.<attr>(value)', function(){
 
     user.name = 'Luna'
   })
+
+  it('its properties should be enumerable', function () {
+    var user = new User({ name: 'Tobi' });
+    var props = []
+
+    for (var p in user) {
+      props.push(p)
+    }
+    props.should.contain('name')
+    props.should.contain('id')
+    props.should.contain('age')
+  })
 })
 
 describe('Model#isNew()', function(){
