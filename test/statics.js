@@ -7,7 +7,7 @@ var User
 beforeEach(function () {
   User = model('User')
     .attr('id', { type: 'number' })
-    .attr('name', { type: 'string' })
+    .attr('name', { type: 'string'})
     .attr('age', { type: 'number' })
 })
 

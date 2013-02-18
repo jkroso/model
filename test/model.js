@@ -7,7 +7,7 @@ var model = require('../lib')
 
 var User = model('User')
   .attr('id', { type: 'number' })
-  .attr('name', { type: 'string' })
+  .attr('name', { type: 'string', default: 'joe' })
   .attr('age', { type: 'number' })
 
 function required(attr) {
@@ -43,13 +43,16 @@ describe('new Model(object)', function(){
     assert('Tobi' == user.name);
     assert(2 == user.age);
   })
-})
 
-describe('Model(object)', function(){
-  it('should populate attrs', function(){
+  it('should work without `new`', function(){
     var user = User({ name: 'Tobi', age: 2 });
     assert('Tobi' == user.name);
     assert(2 == user.age);
+  })
+
+  it('should fallback properties to their default values', function () {
+    var joe = new User
+    joe.name.should.equal('joe')
   })
 })
 
