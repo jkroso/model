@@ -82,6 +82,17 @@ app.del('/user/all', function(req, res){
 });
 
 /**
+ * DELETE user :id
+ */
+
+app.del('/user/:id', function (req, res) {
+  var user = db.users[req.params.id];
+  if (!user) return res.send(404, 'cant find user');
+  db.users.splice(user.id, 1);
+  res.send(200);
+})
+
+/**
  * GET all users.
  */
 

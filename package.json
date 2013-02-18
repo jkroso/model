@@ -13,8 +13,8 @@
     "emitter": "git://github.com/component/emitter",
     "sliced": "0.0.5",
     "set": "git://github.com/jkroso/set",
+    "list-entity": "git://github.com/jkroso/list-entity",
     "reduce": "git://github.com/RedVentures/reduce",
-    "format-parser": "git://github.com/component/format-parser",
     "superagent": "git://github.com/visionmedia/superagent"
   }
 }

@@ -3,10 +3,13 @@ var model = require('../lib')
   , assert = require('chai').assert
   , should = require('chai').should()
 
-var User = model('User')
-  .attr('id', { type: 'number' })
-  .attr('name', { type: 'string' })
-  .attr('age', { type: 'number' })
+var User 
+beforeEach(function () {
+  User = model('User')
+    .attr('id', { type: 'number' })
+    .attr('name', { type: 'string' })
+    .attr('age', { type: 'number' })
+})
 
 describe('Model.url()', function(){
   it('should return the base url', function(){
@@ -43,7 +46,7 @@ describe('Model.all(fn)', function(){
     });
   })
 
-  it('should respond with a collection of all', function(done){
+  it('should respond with a snapshot of all users', function(done){
     User.all(function(err, users){
       assert(!err);
       // assert(3 == users.length());
@@ -51,6 +54,26 @@ describe('Model.all(fn)', function(){
       // assert('loki' == users.at(1).name());
       // assert('jane' == users.at(2).name());
       done();
+    });
+  })
+})
+
+describe('Model.items', function () {
+  it('should contain all instances', function () {
+    var jake = new User({name:'jake'})
+    assert(User.items.size() === 1)
+    assert(jake === User.items.toJSON()[0])
+  })
+
+  it('should not contain instances which have been destroyed', function (done) {
+    var jake = new User({name:'jake'})
+    assert(User.items.size() === 1)
+    jake.save(function(){
+      jake.remove(function (err) {
+        if (err) throw err
+        assert(User.items.size() === 0)
+        done()
+      })
     });
   })
 })
