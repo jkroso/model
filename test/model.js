@@ -3,7 +3,7 @@ var model = require('../lib')
   , assert = require('chai').assert
   , should = require('chai').should()
   , request = require('superagent/lib/client')
-  , Base = require('../lib/static')
+  , Base = require('../lib/base')
 
 var User = model('User')
   .attr('id', { type: 'number' })
@@ -409,7 +409,7 @@ describe('Model#changed(attr)', function () {
     .attr('a')
     .attr('b')
     .attr('c')
-  var user = new User().set({a:1,b:undefined})
+  var user = new User().set({a:1,b:null})
   it('should return true if the attr has changed', function () {
     assert(user.changed('a') === true)
     assert(user.changed('b') === true)
@@ -472,6 +472,5 @@ describe('inheritance', function () {
 
   it('should inherit from Base by default', function () {
     assert(new Pet() instanceof Base)
-    assert(Pet.all === Base.all)
   })
 })
