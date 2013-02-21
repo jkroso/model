@@ -10,7 +10,7 @@
     "mocha": "*"
   },
   "dependencies": {
-    "emitter": "git://github.com/component/emitter",
+    "emitter": "git://github.com/jkroso/Emitter",
     "sliced": "0.0.5",
     "set": "git://github.com/jkroso/set",
     "list-entity": "git://github.com/jkroso/list-entity",
