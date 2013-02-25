@@ -113,12 +113,32 @@ describe('Model#isNew()', function(){
   })
 })
 
-describe('Model#set(attrs)', function(){
+describe('Model#set(prop, val)', function(){
+  it('should set `prop` to `val`', function () {
+    var user = new User
+    user.set('name', 'Tobi')
+    assert('Tobi' == user.name);
+  })
+
+  it('should emit a change event', function () {
+    var user = new User
+    var c = 0
+    user.on('change name', function () { c++ })
+    user.set('name', 'Tobi')
+    assert('Tobi' == user.name)
+    assert(c == 1)
+  })
+})
+
+describe('Model#set(attrs', function () {
   it('should set several attrs', function(){
     var user = new User;
+    var c = 0
+    user.on('change', function () { c++ })
     user.set({ name: 'Tobi', age: 2 });
     assert('Tobi' == user.name);
     assert(2 == user.age);
+    assert(c == 2)
   })
 })
 
@@ -152,9 +172,9 @@ describe('Model#remove()', function(){
     it('should DEL /:model/:id', function(done){
       var pet = new Pet({ name: 'Tobi' });
       pet.save(function(err){
-        assert(!err);
+        should.not.exist(err)
         pet.remove(function(err){
-          assert(!err);
+          should.not.exist(err)
           assert(pet.removed);
           done();
         });
@@ -421,7 +441,7 @@ describe('Model#changed(attr)', function () {
 
 describe('Model#<multi-attr>', function () {
   var User = model('user')
-    .attr('addresses', {cardinality:'many', type:'string'})
+    .attr('addresses', {manager:'set', type:'string'})
 
   var user
   beforeEach(function () {
